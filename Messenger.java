@@ -3,7 +3,7 @@ package battleship;
 public class Messenger {
 
     public void formatErrorMessage() {
-        System.out.println("Error! Wrong format. Correct format: '[A-J][1-10] [A-J[1-10]'! Try again:");
+        System.out.println("Error! Wrong format. Correct format: '[A-J][1-10] [A-J][1-10]'! Try again:");
         System.out.println();
     }
 
