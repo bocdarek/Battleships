@@ -53,64 +53,79 @@ public class GameField {
         return coordinates;
     }
 
+    private void placeShipOnField(String[] coordinates) {
+        int colIndexStart = colNames.indexOf(coordinates[0]);
+        int colIndexStop = colNames.indexOf(coordinates[1]);
+        int rowIndexStart = rowNames.indexOf(coordinates[2]);
+        int rowIndexStop = rowNames.indexOf(coordinates[3]);
+        if (colIndexStart == colIndexStop) {    // vertical position
+            for (int row = rowIndexStart; row <= rowIndexStop; row++) {
+                fields[row][colIndexStart] = shipSymbol;
+            }
+        } else {    // horizontal position
+            for (int col = colIndexStart; col <= colIndexStop; col++) {
+                fields[rowIndexStart][col] = shipSymbol;
+            }
+        }
+    }
+
     private boolean areCoordinatesValid(String[] coordinates, Ship ship) {
         if (coordinates == null) {
             msg.formatErrorMessage();
             return false;
         }
-        int columnIndexStart = colNames.indexOf(coordinates[0]);
-        int columnIndexStop = colNames.indexOf(coordinates[1]);
+        int colIndexStart = colNames.indexOf(coordinates[0]);
+        int colIndexStop = colNames.indexOf(coordinates[1]);
         int rowIndexStart = rowNames.indexOf(coordinates[2]);
         int rowIndexStop = rowNames.indexOf(coordinates[3]);
-        if (columnIndexStart != columnIndexStop && rowIndexStart != rowIndexStop) {    // check if straight
+        if (!isStraight(colIndexStart, colIndexStop, rowIndexStart, rowIndexStop)) {
+            return false;
+        }
+        if (!hasCorrectLength(ship, colIndexStart, colIndexStop, rowIndexStart, rowIndexStop)) {
+            return false;
+        }
+        return !hasCollision(colIndexStart, colIndexStop, rowIndexStart, rowIndexStop);
+    }
+
+    private boolean isStraight(int col1, int col2, int row1, int row2) {
+        if (col1 != col2 && row1 != row2) {
             msg.locationErrorMessage();
             return false;
-        }
-        int shipLength = ship.getLength();
-        if (!(columnIndexStop - columnIndexStart + 1 == shipLength ||      // check if correct length
-                rowIndexStop - rowIndexStart + 1 == shipLength)) {
-            msg.lengthErrorMessage(ship);
-            return false;
-        }
-        // check if no collision
-
-        for (int col = columnIndexStart - 1; col <= columnIndexStop + 1; col++) {
-            if (col < 0 || col > 9) {
-                continue;
-            }
-            if ((rowIndexStart > 0 && fields[rowIndexStart - 1][col].equals(shipSymbol)) ||
-                    (rowIndexStop < 9 && fields[rowIndexStop + 1][col].equals(shipSymbol)))  {
-                msg.collisionErrorMessage();
-                return false;
-            }
-        }
-
-        for (int row = rowIndexStart - 1; row <= rowIndexStop + 1; row++) {
-            if (row < 0 || row > 9) {
-                continue;
-            }
-            if ((columnIndexStart > 0 && fields[row][columnIndexStart - 1].equals(shipSymbol)) ||
-                    (columnIndexStop < 9 && fields[row][columnIndexStop + 1].equals(shipSymbol)))  {
-                msg.collisionErrorMessage();
-                return false;
-            }
         }
         return true;
     }
 
-    private void placeShipOnField(String[] coordinates) {
-        int columnIndexStart = colNames.indexOf(coordinates[0]);
-        int columnIndexStop = colNames.indexOf(coordinates[1]);
-        int rowIndexStart = rowNames.indexOf(coordinates[2]);
-        int rowIndexStop = rowNames.indexOf(coordinates[3]);
-        if (columnIndexStart == columnIndexStop) {    // vertical position
-            for (int row = rowIndexStart; row <= rowIndexStop; row++) {
-                fields[row][columnIndexStart] = shipSymbol;
+    private boolean hasCorrectLength(Ship ship, int col1, int col2, int row1, int row2) {
+        int shipLength = ship.getLength();
+        if (!(col2 - col1 + 1 == shipLength ||
+                row2 - row1 + 1 == shipLength)) {
+            msg.lengthErrorMessage(ship);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasCollision(int col1, int col2, int row1, int row2) {
+        for (int col = col1 - 1; col <= col2 + 1; col++) {
+            if (col < 0 || col > 9) {
+                continue;
             }
-        } else {    // horizontal position
-            for (int col = columnIndexStart; col <= columnIndexStop; col++) {
-                fields[rowIndexStart][col] = shipSymbol;
+            if ((row1 > 0 && fields[row1 - 1][col].equals(shipSymbol)) ||
+                    (row2 < 9 && fields[row2 + 1][col].equals(shipSymbol)))  {
+                msg.collisionErrorMessage();
+                return true;
             }
         }
+        for (int row = row1 - 1; row <= row2 + 1; row++) {
+            if (row < 0 || row > 9) {
+                continue;
+            }
+            if ((col1 > 0 && fields[row][col1 - 1].equals(shipSymbol)) ||
+                    (col2 < 9 && fields[row][col2 + 1].equals(shipSymbol)))  {
+                msg.collisionErrorMessage();
+                return true;
+            }
+        }
+        return false;
     }
 }
