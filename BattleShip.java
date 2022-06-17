@@ -2,9 +2,11 @@ package battleship;
 
 public class BattleShip {
 
-    private final GameField gf = new GameField();
+    private final GameField gameField = new GameField();
+    private final Fleet fleet = new Fleet(1, 1, 1, 1, 1);
 
     public void game() {
-        gf.printField();
+        gameField.printField();
+        gameField.placeShips(fleet);
     }
 }
