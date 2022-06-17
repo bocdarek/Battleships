@@ -14,6 +14,7 @@ public class GameField {
             Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
     private final ArrayList<String> rowNames = new ArrayList<>(
             Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"));
+    private final String shipSymbol = "O";
 
     public GameField() {
         for (String[] row : fields) {
@@ -62,16 +63,39 @@ public class GameField {
         int rowIndexStart = rowNames.indexOf(coordinates[2]);
         int rowIndexStop = rowNames.indexOf(coordinates[3]);
         if (columnIndexStart != columnIndexStop && rowIndexStart != rowIndexStop) {
-            msg.locationErrorMessage();
+            msg.locationErrorMessage();      // check if not diagonal coordinates
             return false;
         }
         int shipLength = ship.getLength();
-        if (!(columnIndexStop - columnIndexStart == shipLength || rowIndexStop - rowIndexStart == shipLength)) {
-            msg.lengthErrorMessage(ship);
+        if (!(columnIndexStop - columnIndexStart + 1 == shipLength ||
+                rowIndexStop - rowIndexStart + 1 == shipLength)) {
+            msg.lengthErrorMessage(ship);       // check if correct length
             return false;
         }
-        if
+        // check if no collision
 
+        for (int i = columnIndexStart - 1; i <= columnIndexStop + 1; i++) {
+            if (i < 0 || i > 9) {
+                continue;
+            }
+            if ((rowIndexStart > 0 && fields[rowIndexStart - 1][i].equals(shipSymbol)) ||
+                    (rowIndexStop < 9 && fields[rowIndexStop + 1][i].equals(shipSymbol)))  {
+                msg.collisionErrorMessage();
+                return false;
+            }
+        }
+
+        for (int i = rowIndexStart - 1; i <= rowIndexStop + 1; i++) {
+            if (i < 0 || i > 9) {
+                continue;
+            }
+            if ((columnIndexStart > 0 && fields[columnIndexStart - 1][i].equals(shipSymbol)) ||
+                    (columnIndexStop < 9 && fields[columnIndexStop + 1][i].equals(shipSymbol)))  {
+                msg.collisionErrorMessage();
+                return false;
+            }
+        }
+        return true;
 
     }
 
@@ -80,7 +104,6 @@ public class GameField {
         int columnIndexStop = colNames.indexOf(coordinates[1]);
         int rowIndexStart = rowNames.indexOf(coordinates[2]);
         int rowIndexStop = rowNames.indexOf(coordinates[3]);
-        String shipSymbol = "O";
         if (columnIndexStart == columnIndexStop) {    // vertical position
             for (int row = rowIndexStart; row <= rowIndexStop; row++) {
                 fields[row][columnIndexStart] = shipSymbol;
