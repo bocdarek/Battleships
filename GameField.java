@@ -107,23 +107,14 @@ public class GameField {
 
     private boolean hasCollision(int col1, int col2, int row1, int row2) {
         for (int col = col1 - 1; col <= col2 + 1; col++) {
-            if (col < 0 || col > 9) {
-                continue;
-            }
-            if ((row1 > 0 && fields[row1 - 1][col].equals(shipSymbol)) ||
-                    (row2 < 9 && fields[row2 + 1][col].equals(shipSymbol)))  {
-                msg.collisionErrorMessage();
-                return true;
-            }
-        }
-        for (int row = row1 - 1; row <= row2 + 1; row++) {
-            if (row < 0 || row > 9) {
-                continue;
-            }
-            if ((col1 > 0 && fields[row][col1 - 1].equals(shipSymbol)) ||
-                    (col2 < 9 && fields[row][col2 + 1].equals(shipSymbol)))  {
-                msg.collisionErrorMessage();
-                return true;
+            for (int row = row1 - 1; row <= row2 + 1; row++) {
+                if (col < 0 || col > 9 || row < 0 || row > 9) {
+                    continue;
+                }
+                if (fields[row][col].equals(shipSymbol))  {
+                    msg.collisionErrorMessage();
+                    return true;
+                }
             }
         }
         return false;
