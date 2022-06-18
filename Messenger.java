@@ -42,7 +42,7 @@ public class Messenger {
     }
 
     public void missMessage() {
-        System.out.println("You missed.");
+        System.out.println("You missed!");
     }
 
     public void sunkShipMessage() {
