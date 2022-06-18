@@ -6,17 +6,19 @@ public class BattleShip {
     private final Fleet fleet = new Fleet(1, 1, 1, 1, 1);
 
     public void game() {
-        gameField.printField();
+        gameField.printWithoutFog();
         gameField.placeShips(fleet);
         System.out.println();
         gameStartMessage();
         takeShot();
+        System.out.println();
+        gameField.printWithoutFog();
     }
 
     private void gameStartMessage() {
         System.out.println("The game starts!");
         System.out.println();
-        gameField.printField();
+        gameField.printWithFog();
     }
 
     private void takeShot() {
@@ -27,11 +29,11 @@ public class BattleShip {
         int row = gameField.getRowNames().indexOf(coordinate[1]);
         if (gameField.getFields()[row][col].equals("O")) {
             gameField.getFields()[row][col] = "X";
-            gameField.printField();
+            gameField.printWithFog();
             System.out.println("\nYou hit a ship!");
         } else {
             gameField.getFields()[row][col] = "M";
-            gameField.printField();
+            gameField.printWithFog();
             System.out.println("\nYou missed!");
         }
     }

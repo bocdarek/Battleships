@@ -34,17 +34,27 @@ public class GameField {
         return fields;
     }
 
-    public void printField() {
+    private void printFields(boolean withFog) {
         System.out.println("  " + String.join(" ", colNames));
         for (int i = 0; i < DIM; i++) {
-            System.out.println(rowNames.get(i) + " " + String.join(" ", fields[i]));
+            String row = String.join(" ", fields[i]);
+            System.out.println(rowNames.get(i) + " "
+                    + (withFog ? row.replace("O", "~") : row));
         }
+    }
+
+    public void printWithoutFog() {
+        printFields(false);
+    }
+
+    public void printWithFog() {
+        printFields(true);
     }
 
     public void placeShips(Fleet fleet) {
         for (Ship ship : fleet.getShips()) {
             placeShip(ship);
-            printField();
+            printWithoutFog();
         }
     }
 
