@@ -79,7 +79,7 @@ public class BattleShip {
     }
 
     private boolean takeShot(GameField gameField, int row, int col) {
-        if (gameField.getFields()[row][col].equals("O") || gameField.getFields()[row][col].equals("X")) {
+        if (gameField.getFields()[row][col].equals("O")) {
             gameField.getFields()[row][col] = "X";
             return true;
         } else {
