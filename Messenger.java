@@ -38,18 +38,38 @@ public class Messenger {
     }
 
     public void hitMessage() {
-        System.out.println("\nYou hit a ship! Try again:");
+        System.out.println("You hit a ship! Try again:");
     }
 
     public void missMessage() {
-        System.out.println("\nYou missed. Try again:");
+        System.out.println("You missed. Try again:");
     }
 
     public void sunkShipMessage() {
-        System.out.println("\nYou sank a ship! Specify a new target:");
+        System.out.println("You sank a ship! Specify a new target:");
     }
 
     public void sunkAllShipsMessage() {
-        System.out.println("\nYou sank the last ship. You won. Congratulations!");
+        System.out.println("You sank the last ship. You won. Congratulations!");
+    }
+
+    public void initiateBoardMessage(int id) {
+        System.out.printf("Player %d, place your ships on the game field%n%n", id);
+    }
+
+    public void askToClearMessage() {
+        System.out.println("\nPress Enter and pass the move to another player");
+    }
+
+    public void clearScreen() {
+        System.out.println("\n".repeat(30));
+    }
+
+    public void boardSeparationLine() {
+        System.out.println("-".repeat(21));
+    }
+
+    public void turnInformation(int id) {
+        System.out.printf("%nPlayer %d, it's your turn:%n", id);
     }
 }

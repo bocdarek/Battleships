@@ -1,57 +1,84 @@
 package battleship;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Scanner;
 
 public class BattleShip {
 
-    private final GameField gameField = new GameField();
-    private final Fleet fleet = new Fleet(1, 1, 1, 1, 1);
     private final Messenger msg = Messenger.getInstance();
+    private final Scanner sc = new Scanner(System.in);
 
     public void game() {
-        int sunkShips = 0;
-        gameField.printWithoutFog();
-        gameField.placeShips(fleet);
-        System.out.println();
-        gameStartMessage();
-        gameField.printWithFog();
-        System.out.println("\nTake a shot!");
-        Set<String> alreadyHitFields = new HashSet<>();
+
+        // set up Players
+        Player player1 = new Player(new GameField(1), new Fleet(1, 1, 1, 1, 1));
+        Player player2 = new Player(new GameField(2), new Fleet(1, 1, 1, 1, 1));
+
+        // game
+        boolean isGameFinished;
         while (true) {
-            String[] coordinate = gameField.requestCoordinate();
-            int col = gameField.getColNames().indexOf(coordinate[0]);
-            int row = gameField.getRowNames().indexOf(coordinate[1]);
-            boolean isHit = takeShot(row, col);
-            gameField.printWithFog();
-            String id = String.format("%d%d", row, col);
-            if (isHit && isSunk(row, col)) {
-                if (!alreadyHitFields.contains(id)) {
-                    alreadyHitFields.add(id);
-                    sunkShips++;
-                }
-                if (sunkShips == fleet.getShips().size()) {
-                    msg.sunkAllShipsMessage();
-                    break;
-                }
-                msg.sunkShipMessage();
-            } else if (isHit) {
-                alreadyHitFields.add(id);
-                msg.hitMessage();
-            } else {
-                msg.missMessage();
+
+            // 1st player turn
+            isGameFinished = nextTurn(player1, player2);
+            if (isGameFinished) {
+                break;
+            }
+
+            // 2nd player turn
+            isGameFinished = nextTurn(player2, player1);
+            if (isGameFinished) {
+                break;
             }
         }
     }
 
-    private void gameStartMessage() {
-        System.out.println("The game starts!");
-        System.out.println();
+    // return true id game is over after this turn
+    private boolean nextTurn(Player player, Player opponent) {
+
+        displayBoards(player, opponent);
+
+        // make a shot
+        String[] coordinate = player.getGameField().requestCoordinate();
+        int col = player.getGameField().getColNames().indexOf(coordinate[0]);
+        int row = player.getGameField().getRowNames().indexOf(coordinate[1]);
+
+        // evaluate the shot
+        boolean isHit = takeShot(player.getGameField(), row, col);
+        String trace = String.format("%d%d", row, col);
+        if (isHit && isSunk(player.getGameField(), row, col)) {
+            if (!player.getAlreadyHitFields().contains(trace)) {
+                player.updateAlreadyHitFields(trace);
+                player.addSunkShip();
+            }
+            if (player.getSunkShips() == player.getFleet().getShips().size()) {
+                msg.sunkAllShipsMessage();
+                return true;
+            }
+            msg.sunkShipMessage();
+        } else if (isHit) {
+            player.updateAlreadyHitFields(trace);
+            msg.hitMessage();
+        } else {
+            msg.missMessage();
+        }
+
+        clearScreen();
+        return false;
     }
 
-    private boolean takeShot(int row, int col) {
+    private void displayBoards(Player player, Player opponent) {
+        opponent.getGameField().printWithFog();
+        msg.boardSeparationLine();
+        player.getGameField().printWithoutFog();
+        msg.turnInformation(player.getGameField().getId());
+    }
+
+    private void clearScreen() {
+        msg.askToClearMessage();
+        sc.nextLine();
+        msg.clearScreen();
+    }
+
+    private boolean takeShot(GameField gameField, int row, int col) {
         if (gameField.getFields()[row][col].equals("O") || gameField.getFields()[row][col].equals("X")) {
             gameField.getFields()[row][col] = "X";
             return true;
@@ -61,7 +88,7 @@ public class BattleShip {
         }
     }
 
-    private boolean isSunk(int row, int col) {
+    private boolean isSunk(GameField gameField, int row, int col) {
         for (int i = row; i >= 0; i--) {
             String field = gameField.getFields()[i][col];
             if (field.equals("O")) {

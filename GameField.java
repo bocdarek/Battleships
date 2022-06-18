@@ -15,11 +15,17 @@ public class GameField {
     private final ArrayList<String> rowNames = new ArrayList<>(
             Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"));
     private final String shipSymbol = "O";
+    private final int id;
 
-    public GameField() {
+    public GameField(int id) {
+        this.id = id;
         for (String[] row : fields) {
             Arrays.fill(row, "~");
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public ArrayList<String> getColNames() {
@@ -52,10 +58,15 @@ public class GameField {
     }
 
     public void placeShips(Fleet fleet) {
+        msg.initiateBoardMessage(id);
+        printWithFog();
         for (Ship ship : fleet.getShips()) {
             placeShip(ship);
             printWithoutFog();
         }
+        msg.askToClearMessage();
+        sc.nextLine();
+        msg.clearScreen();
     }
 
     private void placeShip(Ship ship) {
