@@ -7,7 +7,10 @@ public class Messenger {
     private Messenger() {}
 
     public static Messenger getInstance() {
-        return (instance == null ? new Messenger() : instance);
+        if (instance == null) {
+            instance = new Messenger();
+        }
+        return instance;
     }
 
     public void format1ErrorMessage() {
