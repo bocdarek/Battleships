@@ -2,8 +2,13 @@ package battleship;
 
 public class Messenger {
 
-    public void formatErrorMessage() {
+    public void format1ErrorMessage() {
         System.out.println("Error! Wrong format. Correct format: '[A-J][1-10] [A-J][1-10]'! Try again:");
+        System.out.println();
+    }
+
+    public void format2ErrorMessage() {
+        System.out.println("Error! You entered the wrong coordinates! Try again:");
         System.out.println();
     }
 

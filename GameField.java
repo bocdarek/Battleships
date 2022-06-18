@@ -22,6 +22,18 @@ public class GameField {
         }
     }
 
+    public ArrayList<String> getColNames() {
+        return colNames;
+    }
+
+    public ArrayList<String> getRowNames() {
+        return rowNames;
+    }
+
+    public String[][] getFields() {
+        return fields;
+    }
+
     public void printField() {
         System.out.println("  " + String.join(" ", colNames));
         for (int i = 0; i < DIM; i++) {
@@ -37,11 +49,11 @@ public class GameField {
     }
 
     private void placeShip(Ship ship) {
-        String[] shipPosition = requestPosition(ship);  // [col1, col2, row1, row2] (sorted String array)
+        String[] shipPosition = requestPosition(ship);
         placeShipOnField(shipPosition);
     }
 
-    private String[] requestPosition(Ship ship) {
+    private String[] requestPosition(Ship ship) {       // [col1, col2, row1, row2] (sorted String array)
         System.out.printf("%nEnter the coordinates of the %s (%s cells):%n%n",
                 ship.getName(), ship.getLength());
         String[] coordinates;
@@ -51,6 +63,17 @@ public class GameField {
             coordinates = CoordinatesParser.parseCoordinates(input);
         } while (!areCoordinatesValid(coordinates, ship));
         return coordinates;
+    }
+
+    public String[] requestCoordinate() {           // [col, row] (sorted String array)
+        String[] coordinate;
+        do {
+            System.out.println();
+            String input = sc.nextLine().trim().toUpperCase();
+            System.out.println();
+            coordinate = CoordinatesParser.parseCoordinate(input);
+        } while (!isCoordinateValid(coordinate));
+        return coordinate;
     }
 
     private void placeShipOnField(String[] coordinates) {
@@ -71,7 +94,7 @@ public class GameField {
 
     private boolean areCoordinatesValid(String[] coordinates, Ship ship) {
         if (coordinates == null) {
-            msg.formatErrorMessage();
+            msg.format1ErrorMessage();
             return false;
         }
         int colIndexStart = colNames.indexOf(coordinates[0]);
@@ -118,5 +141,19 @@ public class GameField {
             }
         }
         return false;
+    }
+
+    private boolean isCoordinateValid(String[] coordinate) {
+        if (coordinate == null) {
+            msg.format2ErrorMessage();
+            return false;
+        }
+        int col = colNames.indexOf(coordinate[0]);
+        int row = rowNames.indexOf(coordinate[1]);
+        if (fields[row][col].matches("^X|M$")) {
+            msg.format2ErrorMessage();
+            return false;
+        }
+        return true;
     }
 }
