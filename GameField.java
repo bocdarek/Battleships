@@ -158,12 +158,12 @@ public class GameField {
             msg.format2ErrorMessage();
             return false;
         }
-        int col = colNames.indexOf(coordinate[0]);
-        int row = rowNames.indexOf(coordinate[1]);
-        if (fields[row][col].matches("^X|M$")) {
-            msg.format2ErrorMessage();
-            return false;
-        }
+//        int col = colNames.indexOf(coordinate[0]);
+//        int row = rowNames.indexOf(coordinate[1]);
+//        if (fields[row][col].matches("^X|M$")) {
+//            msg.format2ErrorMessage();
+//            return false;
+//        }
         return true;
     }
 }

@@ -1,5 +1,10 @@
 package battleship;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class BattleShip {
 
     private final GameField gameField = new GameField();
@@ -14,20 +19,26 @@ public class BattleShip {
         gameStartMessage();
         gameField.printWithFog();
         System.out.println("\nTake a shot!");
+        Set<String> alreadyHitFields = new HashSet<>();
         while (true) {
             String[] coordinate = gameField.requestCoordinate();
             int col = gameField.getColNames().indexOf(coordinate[0]);
             int row = gameField.getRowNames().indexOf(coordinate[1]);
             boolean isHit = takeShot(row, col);
             gameField.printWithFog();
+            String id = String.format("%d%d", row, col);
             if (isHit && isSunk(row, col)) {
-                sunkShips++;
+                if (!alreadyHitFields.contains(id)) {
+                    alreadyHitFields.add(id);
+                    sunkShips++;
+                }
                 if (sunkShips == fleet.getShips().size()) {
                     msg.sunkAllShipsMessage();
                     break;
                 }
                 msg.sunkShipMessage();
             } else if (isHit) {
+                alreadyHitFields.add(id);
                 msg.hitMessage();
             } else {
                 msg.missMessage();
@@ -41,7 +52,7 @@ public class BattleShip {
     }
 
     private boolean takeShot(int row, int col) {
-        if (gameField.getFields()[row][col].equals("O")) {
+        if (gameField.getFields()[row][col].equals("O") || gameField.getFields()[row][col].equals("X")) {
             gameField.getFields()[row][col] = "X";
             return true;
         } else {
