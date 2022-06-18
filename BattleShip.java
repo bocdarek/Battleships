@@ -12,15 +12,18 @@ public class BattleShip {
         gameField.placeShips(fleet);
         System.out.println();
         gameStartMessage();
+        gameField.printWithFog();
+        System.out.println("\nTake a shot!");
         while (true) {
-            System.out.println("\nTake a shot!");
             String[] coordinate = gameField.requestCoordinate();
             int col = gameField.getColNames().indexOf(coordinate[0]);
             int row = gameField.getRowNames().indexOf(coordinate[1]);
             boolean isHit = takeShot(row, col);
+            gameField.printWithFog();
             if (isHit && isSunk(row, col)) {
                 sunkShips++;
                 if (sunkShips == fleet.getShips().size()) {
+                    msg.sunkAllShipsMessage();
                     break;
                 }
                 msg.sunkShipMessage();
@@ -30,13 +33,11 @@ public class BattleShip {
                 msg.missMessage();
             }
         }
-        msg.sunkAllShipsMessage();
     }
 
     private void gameStartMessage() {
         System.out.println("The game starts!");
         System.out.println();
-        gameField.printWithFog();
     }
 
     private boolean takeShot(int row, int col) {
