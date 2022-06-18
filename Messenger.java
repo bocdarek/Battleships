@@ -38,15 +38,15 @@ public class Messenger {
     }
 
     public void hitMessage() {
-        System.out.println("You hit a ship! Try again:");
+        System.out.println("You hit a ship!");
     }
 
     public void missMessage() {
-        System.out.println("You missed. Try again:");
+        System.out.println("You missed.");
     }
 
     public void sunkShipMessage() {
-        System.out.println("You sank a ship! Specify a new target:");
+        System.out.println("You sank a ship!");
     }
 
     public void sunkAllShipsMessage() {
