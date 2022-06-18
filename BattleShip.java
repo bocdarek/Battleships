@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class BattleShip {
 
     private final Messenger msg = Messenger.getInstance();
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner sc = GameField.getScanner();
 
     public void game() {
 

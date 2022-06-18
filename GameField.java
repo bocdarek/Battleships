@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class GameField {
 
-    private final Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     private final Messenger msg = Messenger.getInstance();
     private final int DIM = 10;
     private final String[][] fields = new String[DIM][DIM];
@@ -22,6 +22,10 @@ public class GameField {
         for (String[] row : fields) {
             Arrays.fill(row, "~");
         }
+    }
+
+    public static Scanner getScanner() {
+        return sc;
     }
 
     public int getId() {
