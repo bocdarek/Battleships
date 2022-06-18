@@ -64,6 +64,7 @@ public class GameField {
             placeShip(ship);
             printWithoutFog();
         }
+        System.out.println();
         msg.askToClearMessage();
         sc.nextLine();
         msg.clearScreen();

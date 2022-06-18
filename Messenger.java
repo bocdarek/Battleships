@@ -58,7 +58,7 @@ public class Messenger {
     }
 
     public void askToClearMessage() {
-        System.out.println("\nPress Enter and pass the move to another player");
+        System.out.println("Press Enter and pass the move to another player");
     }
 
     public void clearScreen() {
