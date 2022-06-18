@@ -37,25 +37,25 @@ public class BattleShip {
         displayBoards(player, opponent);
 
         // make a shot
-        String[] coordinate = player.getGameField().requestCoordinate();
-        int col = player.getGameField().getColNames().indexOf(coordinate[0]);
-        int row = player.getGameField().getRowNames().indexOf(coordinate[1]);
+        String[] coordinate = opponent.getGameField().requestCoordinate();
+        int col = opponent.getGameField().getColNames().indexOf(coordinate[0]);
+        int row = opponent.getGameField().getRowNames().indexOf(coordinate[1]);
 
         // evaluate the shot
-        boolean isHit = takeShot(player.getGameField(), row, col);
+        boolean isHit = takeShot(opponent.getGameField(), row, col);
         String trace = String.format("%d%d", row, col);
-        if (isHit && isSunk(player.getGameField(), row, col)) {
-            if (!player.getAlreadyHitFields().contains(trace)) {
-                player.updateAlreadyHitFields(trace);
-                player.addSunkShip();
+        if (isHit && isSunk(opponent.getGameField(), row, col)) {
+            if (!opponent.getAlreadyHitFields().contains(trace)) {
+                opponent.updateAlreadyHitFields(trace);
+                opponent.addSunkShip();
             }
-            if (player.getSunkShips() == player.getFleet().getShips().size()) {
+            if (opponent.getSunkShips() == opponent.getFleet().getShips().size()) {
                 msg.sunkAllShipsMessage();
                 return true;
             }
             msg.sunkShipMessage();
         } else if (isHit) {
-            player.updateAlreadyHitFields(trace);
+            opponent.updateAlreadyHitFields(trace);
             msg.hitMessage();
         } else {
             msg.missMessage();
