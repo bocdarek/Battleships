@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class GameField {
 
     private final Scanner sc = new Scanner(System.in);
-    private final Messenger msg = new Messenger();
+    private final Messenger msg = Messenger.getInstance();
     private final int DIM = 10;
     private final String[][] fields = new String[DIM][DIM];
     private final ArrayList<String> colNames = new ArrayList<>(
@@ -141,7 +141,7 @@ public class GameField {
     private boolean hasCollision(int col1, int col2, int row1, int row2) {
         for (int col = col1 - 1; col <= col2 + 1; col++) {
             for (int row = row1 - 1; row <= row2 + 1; row++) {
-                if (col < 0 || col > 9 || row < 0 || row > 9) {
+                if (col < 0 || col > colNames.size() - 1 || row < 0 || row > rowNames.size() - 1) {
                     continue;
                 }
                 if (fields[row][col].equals(shipSymbol))  {
