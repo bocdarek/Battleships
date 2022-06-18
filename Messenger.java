@@ -9,7 +9,6 @@ public class Messenger {
 
     public void format2ErrorMessage() {
         System.out.println("Error! You entered the wrong coordinates! Try again:");
-        System.out.println();
     }
 
     public void lengthErrorMessage(Ship ship) {
